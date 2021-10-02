@@ -95,7 +95,7 @@ def display_introduction():
                             [
                                 dbc.Row([
                                             dbc.Col([
-                                                        html.H4("Succesful mission?", className="display-3"),
+                                                        html.H4("Succesful mission?", className="h1"),
                                                         html.P(
                                                             "Use app to analyze Your results "
                                                             "Let's explore near space!.",
@@ -120,7 +120,7 @@ def force_section():
                             dbc.Row([
                                     dbc.Col(
                                         [
-                                            html.H4("Force exploration", className="display-3"),
+                                            html.H4("Force exploration", className="h1"),
                                             html.P(
                                                 "Use app to analyze Your results "
                                                 "Let's explore near space!.",
@@ -142,7 +142,7 @@ def flight_cards():
     cards = [
         dbc.Card(
             [
-                html.H2(f"26.1 km", className="display-4"),
+                html.H2(f"26.1 km", className="h1"),
                 html.P("Maximum flight height", className="card-text"),
             ],
             body=True,
@@ -150,7 +150,7 @@ def flight_cards():
         ),
         dbc.Card(
             [
-                html.H2(f"3.6 m/s", className="display-4"),
+                html.H2(f"3.6 m/s", className="h1"),
                 html.P("Maximum speed", className="card-text"),
             ],
             body=True,
@@ -159,7 +159,7 @@ def flight_cards():
         ),
         dbc.Card(
             [
-                html.H2(f"12 h 6 m ", className="display-4"),
+                html.H2(f"12 h 6 m ", className="h1"),
                 html.P("Total flight time", className="card-text"),
             ],
             body=True,
@@ -174,7 +174,7 @@ def flight_detail_section():
                             dbc.Row([
                                     dbc.Col(
                                         [
-                                            html.H4("Flight detail", className="display-3"),
+                                            html.H4("Flight detail", className="h1"),
                                             html.P(
                                                 "Use app to compare predicted flight path with the real data",
                                                 className="lead"
@@ -196,7 +196,7 @@ def design_examination_section():
                             dbc.Row([
                                     dbc.Col(
                                         [
-                                            html.H4("Design examination", className="display-3"),
+                                            html.H4("Design examination", className="h1"),
                                             html.P(
                                                 "Use app to compare predicted flight path with the real data",
                                                 className="lead"
@@ -287,15 +287,17 @@ app.layout = html.Div([
                             dbc.Container(children=[
                                                                dbc.Row(dbc.Col(display_navbar(), width=12)),
                                                                dbc.Row(dbc.Col(display_introduction(), width=12)),
-                                                               dbc.Row([dbc.Col(dbc.Jumbotron(html.H4('1', className="display-2")), width=2),dbc.Col(flight_detail_section(), width=10)]),
+                                                               dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('1', className="display-3", style={'textAlign': 'center'})), width=2),dbc.Col(flight_detail_section(), width=10)]),
                                                                dbc.Row(flight_cards(), style={'margin-bottom': '30px'}, justify="center"),
                                                                dbc.Row(dbc.Col(display_map(), width=12), style={'margin-bottom': '30px'}),
-                                                               dbc.Row([dbc.Col(dbc.Jumbotron(html.H4('2', className="display-2")), width=2), dbc.Col(force_section(), width=10)]),
+                                                               dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('2', className="display-3", style={'textAlign': 'center'})), width=2), dbc.Col(force_section(), width=10)]),
                                                                dbc.Row(dbc.Col(force_plots(), width=8)),
-                                                               dbc.Row([dbc.Col(dbc.Jumbotron(html.H4('3', className="display-2")), width=2), dbc.Col(design_examination_section(), width=10)]),
+                                                               dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('3', className="display-3", style={'textAlign': 'center'})), width=2), dbc.Col(design_examination_section(), width=10)]),
                                                             ],
                                           fluid=True)
                         ])
 
 
 
+if __name__ == '__main__':
+    app.run_server(debug=True)
