@@ -136,7 +136,7 @@ def force_section():
                                         ), width=5
                                     )
                                     ])
-                    ])
+                    ], style={'border-radius': '30px', 'background-color': '#f5f5ff'})
 
 def flight_cards():
     cards = [
@@ -189,7 +189,7 @@ def flight_detail_section():
                                         ), width=5
                                     )
                                     ])
-                    ])
+                    ], style={'border-radius': '30px', 'background-color': '#f5f5ff'})
 
 def design_examination_section():
     return dbc.Jumbotron([
@@ -211,7 +211,7 @@ def design_examination_section():
                                         ), width=5
                                     )
                                     ])
-                    ])
+                    ], style={'border-radius': '30px', 'background-color': '#f5f5ff'})
 
 
 def force_plots():
@@ -287,7 +287,7 @@ app.layout = html.Div([
                             dbc.Container(children=[
                                                                dbc.Row(dbc.Col(display_navbar(), width=12)),
                                                                dbc.Row(dbc.Col(display_introduction(), width=12)),
-                                                               dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('1', className="display-3", style={'textAlign': 'center'})), width=2),dbc.Col(flight_detail_section(), width=10)]),
+                                                               dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('1', className="display-3", style={'textAlign': 'center'}), style={'border-radius': '30px', 'background-color': '#f5f5ff'}), width=2),dbc.Col(flight_detail_section(), width=10)]),
                                                                dbc.Row(flight_cards(), style={'margin-bottom': '30px'}, justify="center"),
                                                                dbc.Row(dbc.Col(display_map(), width=12), style={'margin-bottom': '30px'}),
                                                                dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('2', className="display-3", style={'textAlign': 'center'})), width=2), dbc.Col(force_section(), width=10)]),
