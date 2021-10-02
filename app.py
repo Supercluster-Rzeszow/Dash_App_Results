@@ -281,6 +281,8 @@ def force_plots():
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
+server = app.server
+
 app.layout = html.Div([
                             dbc.Container(children=[
                                                                dbc.Row(dbc.Col(display_navbar(), width=12)),
