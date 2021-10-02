@@ -34,7 +34,7 @@ def display_navbar():
         ],
         brand="Mission Results",
         brand_href="#",
-        color="primary",
+        color="#010483",
         dark=True,
         fluid=True
     )
@@ -106,7 +106,7 @@ def display_introduction():
                                                             "You can use our sample data to explore near space mission "
                                                             "or import Your own data to make impressive visualisations."
                                                         ),
-                                                        html.P(dbc.Button("Learn more", color="primary"), className="lead"),], width=8),
+                                                        html.P(dbc.Button("Learn more", color="#010483"), className="lead"),], width=8),
                                             dbc.Col([
                                                     dbc.Button("Import Your data", className="fa fa-send"),
                                             ], width={"size": 2, "order": "last", "offset": 0}),
@@ -163,7 +163,7 @@ def flight_cards():
                 html.P("Total flight time", className="card-text"),
             ],
             body=True,
-            color="primary",
+            color="#010483",
             inverse=True,
         ),
     ]
