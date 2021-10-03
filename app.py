@@ -208,7 +208,8 @@ def flight_detail_section():
                                     ),
                                     dbc.Col(
                                         html.P(
-                                            "Predicting flight path is a difficult task.",
+                                            "Predicting the route of the balloon is the beginning of every mission."
+                                            "It allows you to make sure your planned route is safe for your payload and environment.",
                                             className="lead",
                                         ), width=5
                                     )
@@ -332,7 +333,7 @@ app.layout = html.Div([
                                                                dbc.Row(flight_cards(), style={'margin-bottom': '30px'}, justify="center"),
                                                                dbc.Row(dbc.Col(display_map(), width=12, style={'height': '100%'}), style={'margin-bottom': '30px'}, className="h-40",),
                                                                dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('2', className="display-3", style={'textAlign': 'center'}), style={'border-radius': '30px', 'background-color': '#f5f5ff'}), width=2), dbc.Col(force_section(), width=10)]),
-                                                               dbc.Row([dbc.Col(force_plots(df),width=7), dbc.Col(measure_info(),width=4)], style={'margin-bottom': '30px'}, className="h-50"),
+                                                               dbc.Row([dbc.Col(force_plots(df),width=7), dbc.Col(measure_info(),width=4)], style={'margin-bottom': '30px'}, className="h-40"),
                                                                dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('3', className="display-3", style={'textAlign': 'center'}), style={'border-radius': '30px', 'background-color': '#f5f5ff'}), width=2), dbc.Col(design_examination_section(), width=10)]),
                                                                dbc.Row(dbc.Col(force_ploting(app, data), width=12, style={'height': '100%'}), className="h-40",)
                                                             ],
