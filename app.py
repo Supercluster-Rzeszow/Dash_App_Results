@@ -4,7 +4,7 @@ from dash import html
 import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
 import plotly.io as pio
-
+import datetime
 import numpy as np
 
 import plotly.express as px
@@ -13,6 +13,7 @@ import pandas as pd
 from custom_plots import force_ploting
 
 import Balloon_Calc_v1
+import math
 
 #Mapbox
 MAPBOX_ACCESS_TOKEN = "pk.eyJ1Ijoia2FmcmFua293c2thIiwiYSI6ImNrc2VqeTJqcTB2dDQydnAyZjh0bmRydGMifQ.ZQctBHW3ZVhtb3_y02Y7dQ"
@@ -78,6 +79,7 @@ def display_map():
             "accesstoken": MAPBOX_ACCESS_TOKEN,
             "style": MAPBOX_STYLE,
             "center": {"lat": df['Latitude [deg]'][0], "lon": df['Latitude [deg]'][0]},
+            "zoom": 9
         },
         "showlegend": True,
         "autosize": True,
@@ -85,6 +87,7 @@ def display_map():
         "plot_bgcolor": "#1e1e1e",
         "margin": {"t": 0, "r": 0, "b": 0, "l": 0},
     }
+
 
     map_graph = html.Div(
         id="world-map-wrapper",
@@ -150,10 +153,13 @@ def force_section():
 
 
 def flight_cards():
+    time_m, time_s = divmod(int(max(data["Time [s]"])), 60)
+    time_h, time_m = divmod(time_m, 60)
+    flight_time = str(f'{time_h:d}h:{time_m:02d}m:{time_s:02d}s')
     cards = [
         dbc.Card(
             [
-                html.H2(f"26.1 km", className="h1"),
+                html.H2(f"{round(pop_height/1000,2)} km", className="h1"),
                 html.P("Maximum flight height", className="card-text"),
             ],
             body=True,
@@ -172,7 +178,7 @@ def flight_cards():
         ),
         dbc.Card(
             [
-                html.H2(f"12 h 6 m ", className="h1"),
+                html.H2(f"{flight_time} ", className="h1"),
                 html.P("Total flight time", className="card-text"),
             ],
             body=True,
