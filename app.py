@@ -3,6 +3,7 @@ from dash import dcc
 from dash import html
 import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
+import plotly.io as pio
 
 import numpy as np
 
@@ -138,6 +139,7 @@ def force_section():
                                     ])
                     ], style={'border-radius': '30px', 'background-color': '#f5f5ff'})
 
+
 def flight_cards():
     cards = [
         dbc.Card(
@@ -172,6 +174,7 @@ def flight_cards():
     ]
     return [dbc.Col(card, width={'size': 3, 'offset-right': 1 }) for card in cards]
 
+
 def flight_detail_section():
     return dbc.Jumbotron([
                             dbc.Row([
@@ -193,6 +196,7 @@ def flight_detail_section():
                                     )
                                     ])
                     ], style={'border-radius': '30px', 'background-color': '#f5f5ff'})
+
 
 def design_examination_section():
     return dbc.Jumbotron([
@@ -222,7 +226,7 @@ def force_plots():
     data = np.random.multivariate_normal([0, 0], [[1, 0.5], [0.5, 1]], 100)
     F_G = x=[0,1, 2, 3]
     flight_time = [0,1,2,3]
-    force_fig_1 = px.line(x=flight_time, y=F_G)
+    force_fig_1 = px.line(x=flight_time, y=F_G, template="none")
 
 
     scatter = go.Figure(
@@ -249,17 +253,30 @@ def force_plots():
         yaxis_title="Time [s]",
         legend_title="Legend",
         font=dict(
-            size=24,
-        ),
+            size=18,
+                    ),
         title={
-            'text': "Forces in y axis",
+            'text': "<b>Forces in y axis</b>",
             'y':0.9,
-            'x':0.4,
+            'x':0.5,
             'xanchor': 'center',
-            'yanchor': 'top'}
+            'yanchor': 'top'},
+        template ='none',
+
     )
 
-    time_graph = dcc.Graph(id='graph_1',figure=time_fig,)
+    time_fig.update_layout(
+        {'plot_bgcolor': '#f5f5ff'})
+
+    time_fig.update_layout(
+        title_font_family="Open Sans, sans-serif",
+        title_font_size=24,
+        font_family="Open Sans, sans-serif",
+        paper_bgcolor='#f5f5ff',
+
+                        )
+
+    time_graph = dcc.Graph(id='graph_1',figure=time_fig)
 
 
 
