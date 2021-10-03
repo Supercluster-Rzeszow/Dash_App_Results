@@ -49,49 +49,57 @@ def display_navbar():
     return navbar
 
 def display_map():
+    trace1=[go.Scattermapbox(
+                    lon = df['Longitude [deg]'],
+                    lat = df['Latitude [deg]'],
+                    mode='lines',
+                    line= {"width": 4, "color": "#707070"},
+                    name="Predicted Flight Path",
+                    text="Baloon Predicted Flight Path",
+                    hoverinfo= "text+lon+lat",
 
-    map_data = [
-        {
-            "type": "scattermapbox",
-            "lat": df['Latitude [deg]'],
-            "lon": df['Longitude [deg]'],
-            "hoverinfo": "text+lon+lat",
-            "text": "Baloon Predicted Flight Path",
-            "mode": "lines",
-            "line": {"width": 3, "color": "#707070"},
-            "name": "Predicted flightpath"
-        },
-
-        {
-            "type": "scattermapbox",
-            "lat": df['Latitude [deg]'][0],
-            "lon": df['Latitude [deg]'][0],
-            "hoverinfo": "text+lon+lat",
-            "text": "Starting Point",
-            "mode": "markers",
-            "marker": {"size": 10, "color": "#fec036"},
-            "name": "Starting Point"
-        },
-
-        {
-            "type": "scattermapbox",
-            "lat": df['Latitude [deg]'][0],
-            "lon": df['Latitude [deg]'][0],
-            "hoverinfo": "text+lon+lat",
-            "text": "Mission Radius",
-            "mode": "markers",
-            "marker": {"size": 10, "color": "#fec036"},
-            "name": "Mission Radius"
-        },
+    ),
+        go.Scattermapbox(
+            lon=[df['Longitude [deg]'][0]],
+            lat=[df['Latitude [deg]'][0]],
+            mode='markers',
+            marker={"size": 10, "color": "#fec036"},
+            name="Starting Point",
+            text="Starting Point",
+            hoverinfo="text+lon+lat",
+        )
 
     ]
+
+    trace2={
+        "type": "scattermapbox",
+        "lat": df['Latitude [deg]'][0],
+        "lon": df['Latitude [deg]'][0],
+        "hoverinfo": "text+lon+lat",
+        "text": "Starting Point",
+        "mode": "markers",
+        "marker": {"size": 10, "color": "#fec036"},
+        "name": "Starting Point"
+    }
+
+    trace3={
+        "type": "scattermapbox",
+        "lat": df['Latitude [deg]'][0],
+        "lon": df['Latitude [deg]'][0],
+        "hoverinfo": "text+lon+lat",
+        "text": "Mission Radius",
+        "mode": "markers",
+        "marker": {"size": 10, "color": "#fec036"},
+        "name": "Mission Radius"
+    }
+
 
 
     map_layout = {
         "mapbox": {
             "accesstoken": MAPBOX_ACCESS_TOKEN,
             "style": MAPBOX_STYLE,
-            "center": {"lat": df['Latitude [deg]'][0], "lon": df['Latitude [deg]'][0]},
+            "center": {"lat": df['Latitude [deg]'][0], "lon": df['Longitude [deg]'][0]},
             "zoom": 8
         },
         "showlegend": True,
@@ -114,7 +122,7 @@ def display_map():
         children=[
             dcc.Graph(
                 id="world-map",
-                figure={"data": map_data, "layout": map_layout},
+                figure={"data": trace1, "layout": map_layout},
                 config={"displayModeBar": True, "scrollZoom": True},
                 style={'height': '100%'}
             ),
