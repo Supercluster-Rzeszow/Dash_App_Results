@@ -1,7 +1,7 @@
 import math
 import numpy as np
 import pandas as pd
-
+import random
 
 e   =   2.71828182846
 def Height():
@@ -304,16 +304,28 @@ def MainLoop(wind_altitude_array, wind_direction_array, wind_speed_array):
             pop_height  = h[i]
             break
 
-    array1 = np.transpose(np.array([TimeVector, h, v, a, T, p, rho, g, F_G, F_B, F_D, V_b, A_b, r, latitude, longitude]))
-    array2 = array1[::100][:]
+    gravity_noise = [0] * len(TimeVector)
+    buoyancy_noise = [0] * len(TimeVector)
+    drag_noise = [0] * len(TimeVector)
+    for i in range(0, i):
+        gravity_noise[i] = F_G[i] + (random.random() - 0.5)
+        buoyancy_noise[i] = F_B[i] + (random.random() - 0.5)
+        drag_noise[i] = F_D[i] + (random.random() - 0.5)
+
+    array1 = np.transpose(np.array([TimeVector, h, v, a, T, p, rho, g, F_G, F_B, F_D, V_b, A_b, r, latitude, longitude, gravity_noise, buoyancy_noise, drag_noise]))
+    array1 = array1[0:i]
+    array2 = array1[::200][:]
+
     output_data = pd.DataFrame(array2,columns=['Time [s]', 'Height [m]', 'Vertical speed [m/s]',
                                         'Acceleration [m/s^2]', 'Temperature [K]', 'Pressure [Pa]',
                                         'Density [kg/m^3]', 'Gravitational acceleration [m/s^2]',
                                         'Gravity [N]', 'Buoyancy [N]', 'Drag [N]',
                                         'Balloon volume [m^3]', 'Balloon cross-section area [m^2]', 'Baloon radius [m]',
-                                        'Latitude [deg]', 'Longitude [deg]'])
+                                        'Latitude [deg]', 'Longitude [deg]', 'Gravity Measured [N]', 'Buoyancy Measured [N]', 'Drag Measured [N]'])
 
-    output_data = output_data[0:int(i/100)]
+    # gravity_noise = [0] * i
+    # for i in range(0, i):
+    #     gravity_noise[i] = output_data["Gravity [N]"][i] + (random.random() - 0.5)
 
     return output_data, pop_time, pop_height, north_velocity, east_velocity
 #-----------------------------------------------

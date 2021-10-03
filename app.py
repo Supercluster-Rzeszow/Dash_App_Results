@@ -27,7 +27,7 @@ df = data
 def display_navbar():
     navbar = dbc.NavbarSimple(
         children=[
-            dbc.NavItem(dbc.NavLink("Page 1", href="#")),
+            dbc.NavItem(dbc.NavLink("by SuperClaster", href="#")),
             dbc.DropdownMenu(
                 children=[
                     dbc.DropdownMenuItem("More pages", header=True),
@@ -79,13 +79,15 @@ def display_map():
             "accesstoken": MAPBOX_ACCESS_TOKEN,
             "style": MAPBOX_STYLE,
             "center": {"lat": df['Latitude [deg]'][0], "lon": df['Latitude [deg]'][0]},
-            "zoom": 9
+            "zoom": 8
         },
         "showlegend": True,
         "autosize": True,
         "paper_bgcolor": "#1e1e1e",
         "plot_bgcolor": "#1e1e1e",
         "margin": {"t": 0, "r": 0, "b": 0, "l": 0},
+        "legend": {"font": {"family": "sans-serif", "size":18, "color":"white"}, }
+
     }
 
 
