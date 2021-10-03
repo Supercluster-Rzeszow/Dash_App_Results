@@ -156,6 +156,7 @@ def flight_cards():
     time_m, time_s = divmod(int(max(data["Time [s]"])), 60)
     time_h, time_m = divmod(time_m, 60)
     flight_time = str(f'{time_h:d}h:{time_m:02d}m:{time_s:02d}s')
+    max_speed = max(data["Vertical speed [m/s]"])
     cards = [
         dbc.Card(
             [
@@ -168,7 +169,7 @@ def flight_cards():
         ),
         dbc.Card(
             [
-                html.H2(f"3.6 m/s", className="h1"),
+                html.H2(f"{round(max_speed,2)} m/s", className="h1"),
                 html.P("Maximum speed", className="card-text"),
             ],
             body=True,
