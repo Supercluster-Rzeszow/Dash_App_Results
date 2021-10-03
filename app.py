@@ -316,7 +316,7 @@ app.layout = html.Div([
                                                                dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('2', className="display-3", style={'textAlign': 'center'}), style={'border-radius': '30px', 'background-color': '#f5f5ff'}), width=2), dbc.Col(force_section(), width=10)]),
                                                                dbc.Row(dbc.Col(force_plots(), width=8), style={'margin-bottom': '30px'}, className="h-40"),
                                                                dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('3', className="display-3", style={'textAlign': 'center'}), style={'border-radius': '30px', 'background-color': '#f5f5ff'}), width=2), dbc.Col(design_examination_section(), width=10)]),
-                                                               dbc.Row(dbc.Col(force_ploting(app), width=12, style={'height': '100%'}), className="h-40",)
+                                                               dbc.Row(dbc.Col(force_ploting(app, data), width=12, style={'height': '100%'}), className="h-40",)
                                                             ],
                                           fluid=True, style={"height": "100vh"})
                         ])

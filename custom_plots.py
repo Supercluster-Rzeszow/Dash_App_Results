@@ -12,17 +12,15 @@ import plotly.express as px
 import StandardAtmosphere
 # data
 
-height_range = StandardAtmosphere.Height()
-data, pop_time, pop_height = StandardAtmosphere.AscentLoop(height_range)
-print(data['Czas [s]'])
-df = data
-
-available_indicators = [col for col in data.columns]
 
 
 
 
-def force_ploting(app):
+
+
+def force_ploting(app, data):
+        available_indicators = [col for col in data.columns]
+
         plot_type = go.Figure()
 
         fig =  html.Div([
