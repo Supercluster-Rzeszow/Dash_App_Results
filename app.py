@@ -10,11 +10,18 @@ import numpy as np
 import plotly.express as px
 import pandas as pd
 
+from custom_plots import force_ploting
+
+import StandardAtmosphere
 
 #Mapbox
 MAPBOX_ACCESS_TOKEN = "pk.eyJ1Ijoia2FmcmFua293c2thIiwiYSI6ImNrc2VqeTJqcTB2dDQydnAyZjh0bmRydGMifQ.ZQctBHW3ZVhtb3_y02Y7dQ"
 MAPBOX_STYLE = "mapbox://styles/mapbox/light-v10"
 
+
+height_range = StandardAtmosphere.Height()
+data, pop_time, pop_height = StandardAtmosphere.AscentLoop(height_range)
+df = data
 
 
 def display_navbar():
@@ -49,7 +56,7 @@ def display_map():
             "lat": [0],
             "lon": [0],
             "hoverinfo": "text+lon+lat",
-            "text": "Satellite Path",
+            "text": "Baloon Predicted Flight Path",
             "mode": "lines",
             "line": {"width": 2, "color": "#707070"},
         },
@@ -58,10 +65,21 @@ def display_map():
             "lat": [0],
             "lon": [0],
             "hoverinfo": "text+lon+lat",
-            "text": "Current Position",
+            "text": "Baloon Predicted Real Path",
             "mode": "markers",
             "marker": {"size": 10, "color": "#fec036"},
         },
+
+        {
+            "type": "scattermapbox",
+            "lat": [0],
+            "lon": [0],
+            "hoverinfo": "text+lon+lat",
+            "text": "Mission Radius",
+            "mode": "markers",
+            "marker": {"size": 10, "color": "#fec036"},
+        },
+
     ]
 
 
@@ -84,9 +102,10 @@ def display_map():
             dcc.Graph(
                 id="world-map",
                 figure={"data": map_data, "layout": map_layout},
-                config={"displayModeBar": False, "scrollZoom": False},
+                config={"displayModeBar": True, "scrollZoom": True},
+                style={'height': '100%'}
             ),
-        ],
+        ], style={'height': '100%'}
     )
 
     return map_graph
@@ -276,25 +295,9 @@ def force_plots():
 
                         )
 
-    time_graph = dcc.Graph(id='graph_1',figure=time_fig)
+    time_graph = dcc.Graph(id='graph_1',figure=time_fig, style={'height': '100%'})
 
 
-
-    plot = dbc.Container(
-                            [
-                                dbc.Row([
-                                            dbc.Col([
-                                                        dbc.Row([
-                                                            dbc.Col(dcc.Graph(id='example-graph_1',figure=scatter)),
-                                                            dbc.Col(dcc.Graph(id='example-graph_2', figure=scatter)),
-                                                                ]),
-                                                        dbc.Row([
-                                                            dbc.Col(dcc.Graph(id='example-graph_3', figure=scatter)),
-                                                                dbc.Col(dcc.Graph(id='example-graph_4', figure=scatter)),
-                                                            ]),
-                                                    ])
-                                        ])
-                                    ])
     return time_graph
 
 
@@ -309,14 +312,84 @@ app.layout = html.Div([
                                                                dbc.Row(dbc.Col(display_introduction(), width=12)),
                                                                dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('1', className="display-3", style={'textAlign': 'center'}), style={'border-radius': '30px', 'background-color': '#f5f5ff'}), width=2),dbc.Col(flight_detail_section(), width=10)]),
                                                                dbc.Row(flight_cards(), style={'margin-bottom': '30px'}, justify="center"),
-                                                               dbc.Row(dbc.Col(display_map(), width=12), style={'margin-bottom': '30px'}),
+                                                               dbc.Row(dbc.Col(display_map(), width=12, style={'height': '100%'}), style={'margin-bottom': '30px'}, className="h-75",),
                                                                dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('2', className="display-3", style={'textAlign': 'center'}), style={'border-radius': '30px', 'background-color': '#f5f5ff'}), width=2), dbc.Col(force_section(), width=10)]),
-                                                               dbc.Row(dbc.Col(force_plots(), width=8)),
+                                                               dbc.Row(dbc.Col(force_plots(), width=8), style={'margin-bottom': '30px'}, className="h-75"),
                                                                dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('3', className="display-3", style={'textAlign': 'center'}), style={'border-radius': '30px', 'background-color': '#f5f5ff'}), width=2), dbc.Col(design_examination_section(), width=10)]),
+                                                               dbc.Row(dbc.Col(force_ploting(app), width=12, style={'height': '100%'}), className="h-75",)
                                                             ],
-                                          fluid=True)
+                                          fluid=True, style={"height": "100vh"})
                         ])
 
+#callbacks
+
+@app.callback(
+    dash.dependencies.Output('crossfilter-indicator-scatter', 'figure'),
+    [dash.dependencies.Input('crossfilter-xaxis-column', 'value'),
+     dash.dependencies.Input('crossfilter-yaxis-column', 'value'),
+     dash.dependencies.Input('crossfilter-xaxis-type', 'value'),
+     dash.dependencies.Input('crossfilter-yaxis-type', 'value'),])
+def update_graph(xaxis_column_name, yaxis_column_name,
+                 xaxis_type, yaxis_type):
+    dff = df
+
+    fig = go.Figure()
+
+    fig.update_layout(
+        {'plot_bgcolor': '#f5f5ff'})
+
+    fig.update_layout(
+        title_font_family="Open Sans, sans-serif",
+        title_font_size=24,
+        font_family="Open Sans, sans-serif",
+        paper_bgcolor='#f5f5ff',
+        template='none',
+        margin={'l': 50, 'b': 50, 't': 50, 'r': 50},
+    )
+
+    fig.add_trace(go.Scatter(x=dff['Czas [s]'], y=dff[xaxis_column_name] ))
+
+    fig.update_xaxes(title='Czas [s]', type='linear' if xaxis_type == 'Linear' else 'log')
+
+    fig.update_yaxes(title=yaxis_column_name, type='linear' if yaxis_type == 'Linear' else 'log')
+
+    fig.update_layout(hovermode='closest')
+
+    return fig
+
+@app.callback(
+    dash.dependencies.Output('x-time-series', 'figure'),
+    [dash.dependencies.Input('crossfilter-xaxis-column', 'value'),
+     dash.dependencies.Input('crossfilter-yaxis-column', 'value'),
+     dash.dependencies.Input('crossfilter-xaxis-type', 'value'),
+     dash.dependencies.Input('crossfilter-yaxis-type', 'value'),])
+def update_graph(xaxis_column_name, yaxis_column_name,
+                 xaxis_type, yaxis_type):
+    dff = df
+
+    fig = go.Figure()
+
+    fig.update_layout(
+        {'plot_bgcolor': '#f5f5ff'})
+
+    fig.update_layout(
+        title_font_family="Open Sans, sans-serif",
+        title_font_size=24,
+        font_family="Open Sans, sans-serif",
+        paper_bgcolor='#f5f5ff',
+        template='none',
+        margin={'l': 50, 'b': 50, 't': 50, 'r': 50},
+    )
+
+    fig.add_trace(go.Scatter(x=dff['Czas [s]'], y=dff[xaxis_column_name] ))
+
+    fig.update_xaxes(title='Czas [s]', type='linear' if xaxis_type == 'Linear' else 'log')
+
+    fig.update_yaxes(title=yaxis_column_name, type='linear' if yaxis_type == 'Linear' else 'log')
+
+    fig.update_layout(hovermode='closest')
+
+    return fig
 
 
 if __name__ == '__main__':
