@@ -58,7 +58,19 @@ def display_map():
             "hoverinfo": "text+lon+lat",
             "text": "Baloon Predicted Flight Path",
             "mode": "lines",
-            "line": {"width": 2, "color": "#707070"},
+            "line": {"width": 3, "color": "#707070"},
+            "name": "Predicted flightpath"
+        },
+
+        {
+            "type": "scattermapbox",
+            "lat": df['Latitude [deg]'][0],
+            "lon": df['Latitude [deg]'][0],
+            "hoverinfo": "text+lon+lat",
+            "text": "Starting Point",
+            "mode": "markers",
+            "marker": {"size": 10, "color": "#fec036"},
+            "name": "Starting Point"
         },
 
         {
@@ -69,6 +81,7 @@ def display_map():
             "text": "Mission Radius",
             "mode": "markers",
             "marker": {"size": 10, "color": "#fec036"},
+            "name": "Mission Radius"
         },
 
     ]
@@ -86,7 +99,12 @@ def display_map():
         "paper_bgcolor": "#1e1e1e",
         "plot_bgcolor": "#1e1e1e",
         "margin": {"t": 0, "r": 0, "b": 0, "l": 0},
-        "legend": {"font": {"family": "sans-serif", "size":18, "color":"white"}, 'xanchor': 'left', 'x': 0, 'y':1}
+        "legend": {"font": {"family": "sans-serif", "size":18, "color":"white"}, 'xanchor': 'left', 'x': 0, 'y':1},
+
+        'geo': {
+                'fitbounds':"locations"
+
+    },
 
     }
 
