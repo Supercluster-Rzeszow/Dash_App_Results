@@ -86,7 +86,7 @@ def display_map():
         "paper_bgcolor": "#1e1e1e",
         "plot_bgcolor": "#1e1e1e",
         "margin": {"t": 0, "r": 0, "b": 0, "l": 0},
-        "legend": {"font": {"family": "sans-serif", "size":18, "color":"white"}, }
+        "legend": {"font": {"family": "sans-serif", "size":18, "color":"white"}, 'xanchor': 'left', 'x': 0, 'y':1}
 
     }
 
@@ -146,7 +146,8 @@ def force_section():
                                     ),
                                     dbc.Col(
                                         html.P(
-                                            "Forces sensed with flight computer during whole flight",
+                                            "See what forces were acting on the balloon during the flight.Our flight"
+                                            "computer collected all the necessary data!",
                                             className="lead",
                                         ), width=5
                                     )
@@ -224,7 +225,7 @@ def design_examination_section():
                                         [
                                             html.H4("Design examination", className="h1"),
                                             html.P(
-                                                "Use app to compare predicted flight path with the real data",
+                                                "Use app to explore details of flight!",
                                                 className="lead"
                                             )
                                         ],
@@ -232,7 +233,7 @@ def design_examination_section():
                                     ),
                                     dbc.Col(
                                         html.P(
-                                            "Predicting flight path is a difficult task.",
+                                            "Check all the measurement data collected by the sensors.",
                                             className="lead",
                                         ), width=5
                                     )

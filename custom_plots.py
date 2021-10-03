@@ -31,7 +31,7 @@ def force_ploting(app, data):
                                                         dcc.Dropdown(
                                                             id='crossfilter-xaxis-column',
                                                             options=[{'label': i, 'value': i} for i in available_indicators],
-                                                            value='Buoyancy [N]'
+                                                            value='Baloon radius [m]'
                                                         ), width=10)
                                             ]),
                                     dbc.Row([
@@ -70,13 +70,13 @@ def force_ploting(app, data):
                                             dcc.Dropdown(
                                                 id='crossfilter-yaxis-column',
                                                 options=[{'label': i, 'value': i} for i in available_indicators],
-                                                value='Gravity [N]'
+                                                value='Acceleration [m/s^2]'
                                             ), width=5),
                                         dbc.Col(
                                             dcc.Dropdown(
                                                 id='crossfilter-yaxis-column-2',
                                                 options=[{'label': i, 'value': i} for i in available_indicators],
-                                                value='Gravity [N]'
+                                                value='Temperature [K]'
                                             ), width=5),
                                             ]),
                                             ])
