@@ -112,7 +112,7 @@ def display_introduction():
                                             ], width={"size": 2, "order": "last", "offset": 0}),
                                         ])
 
-                            ],
+                            ], style={'border-bottom-radius': '30px', 'background-color': '#f5f5ff'}
                        )
 
 def force_section():
@@ -146,7 +146,8 @@ def flight_cards():
                 html.P("Maximum flight height", className="card-text"),
             ],
             body=True,
-            color="light",
+            color='#f5f5ff',
+            style={'border-radius': '10px'}
         ),
         dbc.Card(
             [
@@ -156,6 +157,7 @@ def flight_cards():
             body=True,
             color="dark",
             inverse=True,
+            style={'border-radius': '10px'}
         ),
         dbc.Card(
             [
@@ -165,6 +167,7 @@ def flight_cards():
             body=True,
             color="#010483",
             inverse=True,
+            style={'border-radius': '10px'}
         ),
     ]
     return [dbc.Col(card, width={'size': 3, 'offset-right': 1 }) for card in cards]
@@ -290,9 +293,9 @@ app.layout = html.Div([
                                                                dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('1', className="display-3", style={'textAlign': 'center'}), style={'border-radius': '30px', 'background-color': '#f5f5ff'}), width=2),dbc.Col(flight_detail_section(), width=10)]),
                                                                dbc.Row(flight_cards(), style={'margin-bottom': '30px'}, justify="center"),
                                                                dbc.Row(dbc.Col(display_map(), width=12), style={'margin-bottom': '30px'}),
-                                                               dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('2', className="display-3", style={'textAlign': 'center'})), width=2), dbc.Col(force_section(), width=10)]),
+                                                               dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('2', className="display-3", style={'textAlign': 'center'}), style={'border-radius': '30px', 'background-color': '#f5f5ff'}), width=2), dbc.Col(force_section(), width=10)]),
                                                                dbc.Row(dbc.Col(force_plots(), width=8)),
-                                                               dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('3', className="display-3", style={'textAlign': 'center'})), width=2), dbc.Col(design_examination_section(), width=10)]),
+                                                               dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('3', className="display-3", style={'textAlign': 'center'}), style={'border-radius': '30px', 'background-color': '#f5f5ff'}), width=2), dbc.Col(design_examination_section(), width=10)]),
                                                             ],
                                           fluid=True)
                         ])
