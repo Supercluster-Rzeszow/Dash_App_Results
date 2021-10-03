@@ -239,7 +239,7 @@ def design_examination_section():
                     ], style={'border-radius': '30px', 'background-color': '#f5f5ff'})
 
 
-def force_plots():
+def force_plots(df):
     # generate 100 multivariate normal samples
     data = np.random.multivariate_normal([0, 0], [[1, 0.5], [0.5, 1]], 100)
     F_G = x=[0,1, 2, 3]
@@ -255,26 +255,26 @@ def force_plots():
     time_fig = go.Figure()
 
     time_fig.add_trace(go.Scatter(
-        x=[0, 1, 2, 3, 4, 5, 6, 7, 8],
-        y=[0, 1, 2, 3, 4, 5, 6, 7, 8],
+        x=df['Time [s]'],
+        y=df['Buoyancy Measured [N]'],
         name="Predicted"  # this sets its legend entry
     ))
 
     time_fig.add_trace(go.Scatter(
-        x=[0, 1, 2, 3, 4, 5, 6, 7, 8],
-        y=[1, 0, 3, 2, 5, 4, 7, 6, 8],
+        x=df['Time [s]'],
+        y=df['Buoyancy [N]'],
         name="Measured"
     ))
 
     time_fig.update_layout(
-        xaxis_title="Force [N]",
+        xaxis_title="Buoyancy [N]",
         yaxis_title="Time [s]",
         legend_title="Legend",
         font=dict(
             size=18,
                     ),
         title={
-            'text': "<b>Forces in y axis</b>",
+            'text': "<b>Buoyancy Measured vs Predicted</b>",
             'y':0.9,
             'x':0.5,
             'xanchor': 'center',
@@ -313,7 +313,7 @@ app.layout = html.Div([
                                                                dbc.Row(flight_cards(), style={'margin-bottom': '30px'}, justify="center"),
                                                                dbc.Row(dbc.Col(display_map(), width=12, style={'height': '100%'}), style={'margin-bottom': '30px'}, className="h-40",),
                                                                dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('2', className="display-3", style={'textAlign': 'center'}), style={'border-radius': '30px', 'background-color': '#f5f5ff'}), width=2), dbc.Col(force_section(), width=10)]),
-                                                               dbc.Row(dbc.Col(force_plots(), width=8), style={'margin-bottom': '30px'}, className="h-40"),
+                                                               dbc.Row([dbc.Col(force_plots(df),width=8), dbc.Col(dbc.Jumbotron(html.H2('1', className="display-3", style={'textAlign': 'center'})),width=3)], style={'margin-bottom': '30px'}, className="h-40"),
                                                                dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('3', className="display-3", style={'textAlign': 'center'}), style={'border-radius': '30px', 'background-color': '#f5f5ff'}), width=2), dbc.Col(design_examination_section(), width=10)]),
                                                                dbc.Row(dbc.Col(force_ploting(app, data), width=12, style={'height': '100%'}), className="h-40",)
                                                             ],
