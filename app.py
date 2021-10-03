@@ -299,11 +299,30 @@ def force_plots(df):
 
     return time_graph
 
+def measure_info():
+
+           return dbc.Jumbotron([
+
+                        html.H4("Why do measurements go up and down?", className="h2"),
+                        html.P(
+                            "The collected data will never be a straight line - if this is the case, it means that your sensor "
+                            "has too low resolution! Noise is caused by many conditions - it is caused primarily by local "
+                            "disturbances of the measured values, such as vibrations in the case of accelerometers or "
+                            "gusts of air in the case of pressure measurements. Noise can also be created by the power"
+                            "supply to the sensor. Nature is unpredictable - but we can tame these deviations with"
+                            "statistics and signal filtering.",
+                            className="lead",
+                            style={'textAlign': 'left'}
+                        )
+                    ], style={'background-color': '#f5f5ff'})
+
+
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 server = app.server
+
 
 app.layout = html.Div([
                             dbc.Container(children=[
@@ -313,7 +332,7 @@ app.layout = html.Div([
                                                                dbc.Row(flight_cards(), style={'margin-bottom': '30px'}, justify="center"),
                                                                dbc.Row(dbc.Col(display_map(), width=12, style={'height': '100%'}), style={'margin-bottom': '30px'}, className="h-40",),
                                                                dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('2', className="display-3", style={'textAlign': 'center'}), style={'border-radius': '30px', 'background-color': '#f5f5ff'}), width=2), dbc.Col(force_section(), width=10)]),
-                                                               dbc.Row([dbc.Col(force_plots(df),width=8), dbc.Col(dbc.Jumbotron(html.H2('1', className="display-3", style={'textAlign': 'center'})),width=3)], style={'margin-bottom': '30px'}, className="h-40"),
+                                                               dbc.Row([dbc.Col(force_plots(df),width=7), dbc.Col(measure_info(),width=4)], style={'margin-bottom': '30px'}, className="h-50"),
                                                                dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('3', className="display-3", style={'textAlign': 'center'}), style={'border-radius': '30px', 'background-color': '#f5f5ff'}), width=2), dbc.Col(design_examination_section(), width=10)]),
                                                                dbc.Row(dbc.Col(force_ploting(app, data), width=12, style={'height': '100%'}), className="h-40",)
                                                             ],

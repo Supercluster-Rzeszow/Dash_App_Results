@@ -71,13 +71,13 @@ def force_ploting(app, data):
                                                 id='crossfilter-yaxis-column',
                                                 options=[{'label': i, 'value': i} for i in available_indicators],
                                                 value='Gravity [N]'
-                                            ), width=4),
+                                            ), width=5),
                                         dbc.Col(
                                             dcc.Dropdown(
                                                 id='crossfilter-yaxis-column-2',
                                                 options=[{'label': i, 'value': i} for i in available_indicators],
                                                 value='Gravity [N]'
-                                            ), width=4),
+                                            ), width=5),
                                             ]),
                                             ])
                             ], style={

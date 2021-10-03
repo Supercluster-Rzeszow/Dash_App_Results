@@ -3,7 +3,8 @@ import numpy as np
 import pandas as pd
 import random
 
-e   =   2.71828182846
+e = 2.71828182846
+
 def Height():
     H   =   list(range(0, 84000))
     return  H
@@ -133,7 +134,7 @@ def MainLoop(wind_altitude_array, wind_direction_array, wind_speed_array):
     t_0 = 0
     rho_He = 0.1786
     C_d = 0.3
-    #----------- INITIAL CONDITIONS --------------
+    #----------- INITIAL CONDITIONS ---------------
     V_b[0] = 1.1         # initial baloon volume
     BaloonMass = 0.45
     PayloadMass = 0.25
@@ -142,8 +143,12 @@ def MainLoop(wind_altitude_array, wind_direction_array, wind_speed_array):
     initial_altitude = 100            # height above the mean sea level
     initial_latitude = 52.2
     initial_longitude = 51.1
+    parachute_fall_rate_0 = 5
+    #---------------------------------------------
     pop_time = 0
     pop_height = 0
+    landing_time = 0
+    flag = 0
 
 
     #pierwsza pętla
@@ -169,6 +174,8 @@ def MainLoop(wind_altitude_array, wind_direction_array, wind_speed_array):
     east_velocity       = [0] * len(TimeVector)
     wind_speed_test     = [0] * len(TimeVector)
     wind_direction_test = [0] * len(TimeVector)
+    parachute_fall_rate = [0] * len(TimeVector)
+
 
     north_velocity[0]   = 0
     east_velocity[0]    = 0
@@ -183,19 +190,27 @@ def MainLoop(wind_altitude_array, wind_direction_array, wind_speed_array):
         rho[i]          = Density(T[i], p[i])
         V_b[i]          = (k_constant * T[i])/p[i]
         g[i]            = GM / (ER + h[i])**2
-        F_B[i]          = V_b[i] * rho[i] * g[i]
-        F_G[i]          = TotalMass * g[i]
-        A_b[i]          = math.pi * ((3*V_b[i])/(4*math.pi))**(2/3)
-        r[i]            = math.sqrt(A_b[i]/math.pi)
-        F_D[i]          = 0.5*C_d*A_b[i]*((v[i-1])**2)
 
-        a[i]            = (F_B[i] - F_G[i] - F_D[i])/TotalMass
+        if flag == 0:
+            F_B[i]          = V_b[i] * rho[i] * g[i]
+            F_G[i]          = TotalMass * g[i]
+            A_b[i]          = math.pi * ((3*V_b[i])/(4*math.pi))**(2/3)
+            r[i]            = math.sqrt(A_b[i]/math.pi)
+            F_D[i]          = 0.5*C_d*A_b[i]*((v[i-1])**2)
+            a[i]            = (F_B[i] - F_G[i] - F_D[i])/TotalMass
+            calka_v         = calka_v + (a[i] + a[i-1]) * 0.5 * SimBase
+            v[i]            = calka_v
+            calka_h         = calka_h + (v[i] + v[i-1]) * 0.5 * SimBase
+            h[i]            = calka_h
 
-        calka_v         = calka_v + (a[i] + a[i-1]) * 0.5 * SimBase
-        v[i]            = calka_v
 
-        calka_h         = calka_h + (v[i] + v[i-1]) * 0.5 * SimBase
-        h[i]            = calka_h
+        if flag == 1:
+            #v[i] = 8
+            v[i] = parachute_fall_rate_0 * 0.4/ (math.sqrt(rho[i]/rho[0]))
+            calka_h         = h[i - 1] - (v[i] + v[i-1]) * 0.5 * SimBase
+            h[i]            = calka_h
+
+
 
         if wind_altitude_array[0] <= p[i] <= wind_altitude_array[1]:
             wind_speed     = wind_speed_array[0]
@@ -299,9 +314,15 @@ def MainLoop(wind_altitude_array, wind_direction_array, wind_speed_array):
         longitude[i]        = longitude[i - 1] + east_velocity[i] * SimBase * (360 / (2 * math.pi * (ER + h[i])))
 
 
-        if r[i] >= r_pop:
-            pop_time    = i*SimBase
+        if r[i] >= r_pop and flag == 0:
+            flag = 1
             pop_height  = h[i]
+            calka_h = 0
+            pop_time    = i * SimBase
+
+
+        if h[i] <= initial_altitude and flag == 1:
+            landing_time = i * SimBase
             break
 
     gravity_noise = [0] * len(TimeVector)
@@ -317,15 +338,11 @@ def MainLoop(wind_altitude_array, wind_direction_array, wind_speed_array):
     array2 = array1[::200][:]
 
     output_data = pd.DataFrame(array2,columns=['Time [s]', 'Height [m]', 'Vertical speed [m/s]',
-                                        'Acceleration [m/s^2]', 'Temperature [K]', 'Pressure [Pa]',
-                                        'Density [kg/m^3]', 'Gravitational acceleration [m/s^2]',
-                                        'Gravity [N]', 'Buoyancy [N]', 'Drag [N]',
-                                        'Balloon volume [m^3]', 'Balloon cross-section area [m^2]', 'Baloon radius [m]',
-                                        'Latitude [deg]', 'Longitude [deg]', 'Gravity Measured [N]', 'Buoyancy Measured [N]', 'Drag Measured [N]'])
-
-    # gravity_noise = [0] * i
-    # for i in range(0, i):
-    #     gravity_noise[i] = output_data["Gravity [N]"][i] + (random.random() - 0.5)
+                                               'Acceleration [m/s^2]', 'Temperature [K]', 'Pressure [Pa]',
+                                               'Density [kg/m^3]', 'Gravitational acceleration [m/s^2]',
+                                               'Gravity [N]', 'Buoyancy [N]', 'Drag [N]',
+                                               'Balloon volume [m^3]', 'Balloon cross-section area [m^2]', 'Baloon radius [m]',
+                                               'Latitude [deg]', 'Longitude [deg]', 'Gravity Measured [N]', 'Buoyancy Measured [N]', 'Drag Measured [N]'])
 
     return output_data, pop_time, pop_height, north_velocity, east_velocity
 #-----------------------------------------------
@@ -346,14 +363,3 @@ def run():
     output_data, pop_time, pop_height, north_velocity, east_velocity = MainLoop(wind_altitude_array, wind_direction_array, wind_speed_array)
     return output_data, pop_time, pop_height, north_velocity, east_velocity
 
-
-
-#print(pop_height)
-
-#
-# #plt.plot(output_data["Time [s]"]/60, output_data["Latitude [deg]"])
-# #plt.plot(output_data["Time [s]"]/60, output_data["Longitude [deg]"])
-#
-# plt.plot(output_data["Time [s]"]/60, north_velocity)
-# #plt.plot(output_data["Time [s]"]/60, east_velocity)
-# plt.show()
