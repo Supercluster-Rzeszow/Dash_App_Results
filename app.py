@@ -312,11 +312,11 @@ app.layout = html.Div([
                                                                dbc.Row(dbc.Col(display_introduction(), width=12)),
                                                                dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('1', className="display-3", style={'textAlign': 'center'}), style={'border-radius': '30px', 'background-color': '#f5f5ff'}), width=2),dbc.Col(flight_detail_section(), width=10)]),
                                                                dbc.Row(flight_cards(), style={'margin-bottom': '30px'}, justify="center"),
-                                                               dbc.Row(dbc.Col(display_map(), width=12, style={'height': '100%'}), style={'margin-bottom': '30px'}, className="h-75",),
+                                                               dbc.Row(dbc.Col(display_map(), width=12, style={'height': '100%'}), style={'margin-bottom': '30px'}, className="h-40",),
                                                                dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('2', className="display-3", style={'textAlign': 'center'}), style={'border-radius': '30px', 'background-color': '#f5f5ff'}), width=2), dbc.Col(force_section(), width=10)]),
-                                                               dbc.Row(dbc.Col(force_plots(), width=8), style={'margin-bottom': '30px'}, className="h-75"),
+                                                               dbc.Row(dbc.Col(force_plots(), width=8), style={'margin-bottom': '30px'}, className="h-40"),
                                                                dbc.Row([dbc.Col(dbc.Jumbotron(html.H2('3', className="display-3", style={'textAlign': 'center'}), style={'border-radius': '30px', 'background-color': '#f5f5ff'}), width=2), dbc.Col(design_examination_section(), width=10)]),
-                                                               dbc.Row(dbc.Col(force_ploting(app), width=12, style={'height': '100%'}), className="h-75",)
+                                                               dbc.Row(dbc.Col(force_ploting(app), width=12, style={'height': '100%'}), className="h-40",)
                                                             ],
                                           fluid=True, style={"height": "100vh"})
                         ])
@@ -351,7 +351,7 @@ def update_graph(xaxis_column_name, yaxis_column_name,
 
     fig.update_xaxes(title='Czas [s]', type='linear' if xaxis_type == 'Linear' else 'log')
 
-    fig.update_yaxes(title=yaxis_column_name, type='linear' if yaxis_type == 'Linear' else 'log')
+    fig.update_yaxes(title=xaxis_column_name, type='linear' if yaxis_type == 'Linear' else 'log')
 
     fig.update_layout(hovermode='closest')
 
@@ -381,7 +381,41 @@ def update_graph(xaxis_column_name, yaxis_column_name,
         margin={'l': 50, 'b': 50, 't': 50, 'r': 50},
     )
 
-    fig.add_trace(go.Scatter(x=dff['Czas [s]'], y=dff[xaxis_column_name] ))
+    fig.add_trace(go.Scatter(x=dff['Czas [s]'], y=dff[yaxis_column_name] ))
+
+    fig.update_xaxes(title='Czas [s]', type='linear' if xaxis_type == 'Linear' else 'log')
+
+    fig.update_yaxes(title=yaxis_column_name, type='linear' if yaxis_type == 'Linear' else 'log')
+
+    fig.update_layout(hovermode='closest')
+
+    return fig
+
+@app.callback(
+    dash.dependencies.Output('y-time-series', 'figure'),
+    [dash.dependencies.Input('crossfilter-xaxis-column', 'value'),
+     dash.dependencies.Input('crossfilter-yaxis-column', 'value'),
+     dash.dependencies.Input('crossfilter-xaxis-type', 'value'),
+     dash.dependencies.Input('crossfilter-yaxis-type', 'value'),])
+def update_graph(xaxis_column_name, yaxis_column_name,
+                 xaxis_type, yaxis_type):
+    dff = df
+
+    fig = go.Figure()
+
+    fig.update_layout(
+        {'plot_bgcolor': '#f5f5ff'})
+
+    fig.update_layout(
+        title_font_family="Open Sans, sans-serif",
+        title_font_size=24,
+        font_family="Open Sans, sans-serif",
+        paper_bgcolor='#f5f5ff',
+        template='none',
+        margin={'l': 50, 'b': 50, 't': 50, 'r': 50},
+    )
+
+    fig.add_trace(go.Scatter(x=dff['Czas [s]'], y=dff[yaxis_column_name] ))
 
     fig.update_xaxes(title='Czas [s]', type='linear' if xaxis_type == 'Linear' else 'log')
 

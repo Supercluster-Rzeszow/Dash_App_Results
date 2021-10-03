@@ -80,7 +80,7 @@ def force_ploting(app):
                                                             dbc.Row(dcc.Graph(id='y-time-series', figure=plot_type, style={'height': '90%','width':'90%'}), className="h-50"),
                                                             ])
                                                     ], className="h-100")
-                                        ], fluid=True, style={"height": "100vh"})
+                                        ], fluid=True, style={"height": "50vh"})
             ])
 
 
