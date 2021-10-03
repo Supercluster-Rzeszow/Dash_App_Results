@@ -9,7 +9,6 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 
-import StandardAtmosphere
 # data
 
 
@@ -24,36 +23,63 @@ def force_ploting(app, data):
         plot_type = go.Figure()
 
         fig =  html.Div([
-                            html.Div([
+                            dbc.Row([
 
-                                html.Div([
-                                    dcc.Dropdown(
-                                        id='crossfilter-xaxis-column',
-                                        options=[{'label': i, 'value': i} for i in available_indicators],
-                                        value='Czas [s]'
-                                    ),
-                                    dcc.RadioItems(
-                                        id='crossfilter-xaxis-type',
-                                        options=[{'label': i, 'value': i} for i in ['Linear', 'Log']],
-                                        value='Linear',
-                                        labelStyle={'display': 'inline-block', 'marginTop': '5px'}
-                                    )
+                                dbc.Col([
+                                    dbc.Row([
+                                                dbc.Col(
+                                                        dcc.Dropdown(
+                                                            id='crossfilter-xaxis-column',
+                                                            options=[{'label': i, 'value': i} for i in available_indicators],
+                                                            value='Buoyancy [N]'
+                                                        ), width=10)
+                                            ]),
+                                    dbc.Row([
+                                        dbc.Col(
+                                                dbc.Row(
+                                                    [
+                                                        dbc.Col(dbc.Alert("X Axis options", color="#f5f5ff"), width={"size": 5, "offset": 1}),
+
+                                                        dbc.Col(dcc.RadioItems(
+                                                            id='crossfilter-xaxis-type-1',
+                                                            options=[{'label': i, 'value': i} for i in ['Linear', 'Log']],
+                                                            value='Linear',
+                                                            labelStyle={'display': 'inline-block', 'marginTop': '5px'},
+                                                                        ), width={"size": 3, "offset": 1})
+                                                        ]),
+                                                        width=5),
+                                        dbc.Col(
+                                            dbc.Row([
+                                                    dbc.Col(dbc.Alert("Y Axis options", color="#f5f5ff"), width={"size": 5, "offset": 1}),
+                                                    dbc.Col(dcc.RadioItems(
+                                                        id='crossfilter-yaxis-type-1',
+                                                        options=[{'label': i, 'value': i} for i in ['Linear', 'Log']],
+                                                        value='Linear',
+                                                        labelStyle={'display': 'inline-block', 'marginTop': '5px'},
+                                                                ), width={"size": 3, "offset": 1})
+                                                ]),
+                                                width=5),
+
+                                    ])
                                 ],
                                 style={'width': '49%', 'display': 'inline-block'}),
 
-                                html.Div([
-                                    dcc.Dropdown(
-                                        id='crossfilter-yaxis-column',
-                                        options=[{'label': i, 'value': i} for i in available_indicators],
-                                        value='Czas [s]'
-                                    ),
-                                    dcc.RadioItems(
-                                        id='crossfilter-yaxis-type',
-                                        options=[{'label': i, 'value': i} for i in ['Linear', 'Log']],
-                                        value='Linear',
-                                        labelStyle={'display': 'inline-block', 'marginTop': '5px'},
-                                    )
-                                ], style={'width': '49%', 'float': 'right', 'display': 'inline-block'})
+                                dbc.Col([
+                                    dbc.Row([
+                                        dbc.Col(
+                                            dcc.Dropdown(
+                                                id='crossfilter-yaxis-column',
+                                                options=[{'label': i, 'value': i} for i in available_indicators],
+                                                value='Gravity [N]'
+                                            ), width=4),
+                                        dbc.Col(
+                                            dcc.Dropdown(
+                                                id='crossfilter-yaxis-column-2',
+                                                options=[{'label': i, 'value': i} for i in available_indicators],
+                                                value='Gravity [N]'
+                                            ), width=4),
+                                            ]),
+                                            ])
                             ], style={
                                 'padding': '10px 5px'
                             }),

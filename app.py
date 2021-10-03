@@ -12,15 +12,14 @@ import pandas as pd
 
 from custom_plots import force_ploting
 
-import StandardAtmosphere
+import Balloon_Calc_v1
 
 #Mapbox
 MAPBOX_ACCESS_TOKEN = "pk.eyJ1Ijoia2FmcmFua293c2thIiwiYSI6ImNrc2VqeTJqcTB2dDQydnAyZjh0bmRydGMifQ.ZQctBHW3ZVhtb3_y02Y7dQ"
 MAPBOX_STYLE = "mapbox://styles/mapbox/light-v10"
 
 
-height_range = StandardAtmosphere.Height()
-data, pop_time, pop_height = StandardAtmosphere.AscentLoop(height_range)
+data, pop_time, pop_height, north_velocity, east_velocity = Balloon_Calc_v1.run()
 df = data
 
 
@@ -53,27 +52,18 @@ def display_map():
     map_data = [
         {
             "type": "scattermapbox",
-            "lat": [0],
-            "lon": [0],
+            "lat": df['Latitude [deg]'],
+            "lon": df['Longitude [deg]'],
             "hoverinfo": "text+lon+lat",
             "text": "Baloon Predicted Flight Path",
             "mode": "lines",
             "line": {"width": 2, "color": "#707070"},
         },
-        {
-            "type": "scattermapbox",
-            "lat": [0],
-            "lon": [0],
-            "hoverinfo": "text+lon+lat",
-            "text": "Baloon Predicted Real Path",
-            "mode": "markers",
-            "marker": {"size": 10, "color": "#fec036"},
-        },
 
         {
             "type": "scattermapbox",
-            "lat": [0],
-            "lon": [0],
+            "lat": df['Latitude [deg]'][0],
+            "lon": df['Latitude [deg]'][0],
             "hoverinfo": "text+lon+lat",
             "text": "Mission Radius",
             "mode": "markers",
@@ -87,7 +77,7 @@ def display_map():
         "mapbox": {
             "accesstoken": MAPBOX_ACCESS_TOKEN,
             "style": MAPBOX_STYLE,
-            "center": {"lat": 45},
+            "center": {"lat": df['Latitude [deg]'][0], "lon": df['Latitude [deg]'][0]},
         },
         "showlegend": True,
         "autosize": True,
@@ -326,10 +316,9 @@ app.layout = html.Div([
 @app.callback(
     dash.dependencies.Output('crossfilter-indicator-scatter', 'figure'),
     [dash.dependencies.Input('crossfilter-xaxis-column', 'value'),
-     dash.dependencies.Input('crossfilter-yaxis-column', 'value'),
-     dash.dependencies.Input('crossfilter-xaxis-type', 'value'),
-     dash.dependencies.Input('crossfilter-yaxis-type', 'value'),])
-def update_graph(xaxis_column_name, yaxis_column_name,
+     dash.dependencies.Input('crossfilter-xaxis-type-1', 'value'),
+     dash.dependencies.Input('crossfilter-yaxis-type-1', 'value'),])
+def update_graph(xaxis_column_name,
                  xaxis_type, yaxis_type):
     dff = df
 
@@ -347,9 +336,9 @@ def update_graph(xaxis_column_name, yaxis_column_name,
         margin={'l': 50, 'b': 50, 't': 50, 'r': 50},
     )
 
-    fig.add_trace(go.Scatter(x=dff['Czas [s]'], y=dff[xaxis_column_name] ))
+    fig.add_trace(go.Scatter(x=dff['Time [s]'], y=dff[xaxis_column_name] ))
 
-    fig.update_xaxes(title='Czas [s]', type='linear' if xaxis_type == 'Linear' else 'log')
+    fig.update_xaxes(title='Time [s]', type='linear' if xaxis_type == 'Linear' else 'log')
 
     fig.update_yaxes(title=xaxis_column_name, type='linear' if yaxis_type == 'Linear' else 'log')
 
@@ -359,11 +348,11 @@ def update_graph(xaxis_column_name, yaxis_column_name,
 
 @app.callback(
     dash.dependencies.Output('x-time-series', 'figure'),
-    [dash.dependencies.Input('crossfilter-xaxis-column', 'value'),
+    [
      dash.dependencies.Input('crossfilter-yaxis-column', 'value'),
-     dash.dependencies.Input('crossfilter-xaxis-type', 'value'),
-     dash.dependencies.Input('crossfilter-yaxis-type', 'value'),])
-def update_graph(xaxis_column_name, yaxis_column_name,
+     dash.dependencies.Input('crossfilter-xaxis-type-1', 'value'),
+     dash.dependencies.Input('crossfilter-yaxis-type-1', 'value'),])
+def update_graph(yaxis_column_name,
                  xaxis_type, yaxis_type):
     dff = df
 
@@ -381,11 +370,11 @@ def update_graph(xaxis_column_name, yaxis_column_name,
         margin={'l': 50, 'b': 50, 't': 50, 'r': 50},
     )
 
-    fig.add_trace(go.Scatter(x=dff['Czas [s]'], y=dff[yaxis_column_name] ))
+    fig.add_trace(go.Scatter(x=dff['Time [s]'], y=dff[yaxis_column_name] ))
 
-    fig.update_xaxes(title='Czas [s]', type='linear' if xaxis_type == 'Linear' else 'log')
+    fig.update_xaxes(title='Time [s]', type='linear' )
 
-    fig.update_yaxes(title=yaxis_column_name, type='linear' if yaxis_type == 'Linear' else 'log')
+    fig.update_yaxes(title=yaxis_column_name, type='linear')
 
     fig.update_layout(hovermode='closest')
 
@@ -393,11 +382,11 @@ def update_graph(xaxis_column_name, yaxis_column_name,
 
 @app.callback(
     dash.dependencies.Output('y-time-series', 'figure'),
-    [dash.dependencies.Input('crossfilter-xaxis-column', 'value'),
-     dash.dependencies.Input('crossfilter-yaxis-column', 'value'),
-     dash.dependencies.Input('crossfilter-xaxis-type', 'value'),
-     dash.dependencies.Input('crossfilter-yaxis-type', 'value'),])
-def update_graph(xaxis_column_name, yaxis_column_name,
+    [
+     dash.dependencies.Input('crossfilter-yaxis-column-2', 'value'),
+     dash.dependencies.Input('crossfilter-xaxis-type-1', 'value'),
+     dash.dependencies.Input('crossfilter-yaxis-type-1', 'value'),])
+def update_graph(yaxis_column_name,
                  xaxis_type, yaxis_type):
     dff = df
 
@@ -415,11 +404,11 @@ def update_graph(xaxis_column_name, yaxis_column_name,
         margin={'l': 50, 'b': 50, 't': 50, 'r': 50},
     )
 
-    fig.add_trace(go.Scatter(x=dff['Czas [s]'], y=dff[yaxis_column_name] ))
+    fig.add_trace(go.Scatter(x=dff['Time [s]'], y=dff[yaxis_column_name] ))
 
-    fig.update_xaxes(title='Czas [s]', type='linear' if xaxis_type == 'Linear' else 'log')
+    fig.update_xaxes(title='Time [s]', type='linear')
 
-    fig.update_yaxes(title=yaxis_column_name, type='linear' if yaxis_type == 'Linear' else 'log')
+    fig.update_yaxes(title=yaxis_column_name, type='linear')
 
     fig.update_layout(hovermode='closest')
 
